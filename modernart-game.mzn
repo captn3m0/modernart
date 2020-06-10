@@ -1,5 +1,6 @@
 include "alldifferent.mzn";
 include "globals.mzn";
+include "modernart-sanity.mzn";
 
 % Constraints per artist
 % TODO: This is also TOTAL card limit, not visible
@@ -15,24 +16,11 @@ constraint sum(p in Players, r in Rounds) (visible_count_per_round_per_artist_pe
 constraint sum(p in Players, r in Rounds) (visible_count_per_round_per_artist_per_player[r,p,KarlGitter])>=0;
 constraint sum(p in Players, r in Rounds) (visible_count_per_round_per_artist_per_player[r,p,Krypto])>=0;
 
-% Score sanity per round
-constraint forall (a in Artists, r in Rounds) (
-  ranking_score_per_artist_per_round[r,a] >=0
-);
-
 % Calculate total cards of an artist played per round
 constraint forall (a in Artists, r in Rounds) (
   cards_per_artist_per_round[r, a] = sum(p in Players) (visible_count_per_round_per_artist_per_player[r,p,a])
 );
 
-% Sanity check
-constraint forall (a in Artists, r in Rounds) (
-  cards_per_artist_per_round[r,a]>=0
-);
-% So they don't go negative
-constraint forall (a in Artists, r in Rounds, p in Players) (
-  visible_count_per_round_per_artist_per_player[r,p, a]>=0
-);
 
 % Calculate total score per player
 constraint forall(r in Rounds, p in Players) (
@@ -68,6 +56,16 @@ constraint forall(r in Rounds, a in Artists) (
   awards_per_round_per_artist[r,a] = 1 -> cards_per_artist_per_round[r,a] > 0
 );
 
+% DOUBLE CARDS
+% - Double cards are counted as VISIBLE
+% - Double cards CANNOT breach the 6 LIMIT
+% Total number of DOUBLE CARDS for each artist = 1
+% FOR EVERY ROUND+ARTIST combination, only 1 player should have played a double card
+% TODO: Check if this is still correct after a second round
+constraint forall(a in Artists) (
+  sum(p in Players, r in Rounds) (double_played[r,p,a])  = 1
+);
+
 % Score = ranking_score + award_score if an award was given this round
 constraint forall(r in Rounds, a in Artists) (
   total_score_per_round_per_artist[r,a] = 
@@ -78,11 +76,42 @@ constraint forall(r in Rounds, a in Artists) (
     endif
 );
 
-% constraint forall(r in Rounds, a in Artists) (
-%   awards_per_round_per_artist
+array[Rounds,Players] of var int: max_cards_per_round_per_player;
+
+% What is the extra cards you can possibly play
+array[Rounds,Players,Artists] of var bool: bonus_due_to_double_cards;
+
+constraint forall(a in Artists, r in Rounds, p in Players) (
+  % If this player played more than 2 cards of this artist
+  if visible_count_per_round_per_artist_per_player[r,p,a] >=2
+  % And this artist is the winning artist this round
+     /\ row(sorted_artists_per_round,r)[1] = a
+  % And you closed this round
+     /\ visible_count_per_round_per_artist_per_player[r,p,a] = max_visible_cards
+  % and they are claiming their double now
+     /\ double_played[r,p,a] then
+    bonus_due_to_double_cards[r,p,a] = true
+  else
+    bonus_due_to_double_cards[r,p,a] = false
+  endif
+);
+
+% array[Rounds,Players] of var int: negs_due_to_double_cards;
+
+% constraint forall(r in Rounds, p in Players) (
+  
 % );
+
+% Calculate maximum cards any player can play in first round
+constraint forall(p in Players) (
+  max_cards_per_round_per_player[Round1,p] = 13
+);
 
 % TODO: This is actual not VISIBLE, but TOTAL cards LIMIT
 % TODO: This does not consider any of the symbols
-% You can max play 13 cards in Round 1
-constraint forall(p in Players) (sum(a in Artists) (visible_count_per_round_per_artist_per_player[Round1,p,a]) <=13);
+% IMPLIED RULE: You can max play 13 cards in Round 1
+constraint forall(p in Players) (
+  sum(a in Artists) (
+    visible_count_per_round_per_artist_per_player[Round1,p,a]
+  ) <= max_cards_per_round_per_player[Round1,p]
+);

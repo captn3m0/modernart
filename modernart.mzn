@@ -3,20 +3,30 @@ enum Players;
 enum Artists;
 enum Rounds;
 
-Players = { Nemo, Jana, Adam};
+Players = { Nemo, Jana};
 Artists = {Krypto,KarlGitter,ChristinP,Yoko,LiteMetal};
 Rounds = {Round1};
 
 % Number of cards per round per player per artist
 array[Rounds,Players,Artists] of var int: visible_count_per_round_per_artist_per_player;
 
+% First player every Round
+array[Rounds] of var Players: first_player;
+
+% Closing player every Round
+array[Rounds] of var Players: last_player;
+
 % How much score was made by each artist in each round by just RANKING
 array[Rounds,Artists] of var int: ranking_score_per_artist_per_round;
+
 % Total points that an artist has in a given round
 array[Rounds,Artists] of var int: total_score_per_round_per_artist;
 
 % Whether an artist won an award in a given round
 array[Rounds,Artists] of var bool: awards_per_round_per_artist;
+
+% Whether you played a double this round
+array[Rounds,Players,Artists] of var bool: double_played;
 
 % Winning artists for each round (just-by-ranking)
 array[Rounds,1..card(Artists)] of var Artists: sorted_artists_per_round;
