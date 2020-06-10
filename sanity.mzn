@@ -14,3 +14,8 @@ constraint forall (a in Artists, r in Rounds) (
 
 % Round 1 Player 1
 constraint first_player[Round1] = Nemo;
+
+% Visible Cards per round per player for every artist > 0
+constraint forall(a in Artists) (
+  sum(p in Players, r in Rounds) (visible_count_per_round_per_artist_per_player[r,p,a])>=0
+);
