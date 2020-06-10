@@ -21,12 +21,17 @@ array[Rounds,Artists] of var bool: awards_per_round_per_artist;
 % Winning artists for each round (just-by-ranking)
 array[Rounds,1..card(Artists)] of var Artists: sorted_artists_per_round;
 
+% Score a player gets in each given round
 array[Rounds,Players] of var int: score_per_round_per_player;
+
+% Final score of a player
+array[Players] of var int: score_per_player;
 
 % Total number of a cards of an artist that were PLAYED this round
 array[Rounds, Artists] of var int: cards_per_artist_per_round;
 
 % Dumb constraints to help maximize score
 constraint score_per_round_per_player[Round1,Nemo] > score_per_round_per_player[Round1,Jana];
-constraint score_per_round_per_player[Round1,Jana] > 15;
-solve maximize score_per_round_per_player[Round1,Nemo];
+% constraint score_per_round_per_player[Round1,Jana] > 10;
+% constraint score_per_round_per_player[Round1,Adam] > 5;
+solve maximize sum(p in Players)(score_per_player[p]);

@@ -38,6 +38,9 @@ constraint forall (a in Artists, r in Rounds, p in Players) (
 constraint forall(r in Rounds, p in Players) (
   score_per_round_per_player[r,p] = sum(a in Artists) (visible_count_per_round_per_artist_per_player[r,p,a] * ranking_score_per_artist_per_round[r,a])
 );
+constraint forall(p in Players) (
+  score_per_player[p] = sum(r in Rounds) (score_per_round_per_player[r,p])
+);
 
 % Max number of visible cards can be 6 for any artist per player
 var 5..6: max_visible_cards;
