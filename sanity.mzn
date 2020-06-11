@@ -28,4 +28,5 @@ constraint forall(a in Artists) (
 );
 
 % This is a  2-5 player game
-constraint 2<= assert(card(Players)) <=5
+constraint assert(card(Players) <=5, "Max Players is 5");
+constraint assert(card(Players) >=1, "MinPlayers is 2");

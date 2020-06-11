@@ -54,6 +54,12 @@ constraint forall(p in Players) (
   StartingCardsInHand[Round4,p] = StartingCardsInHand[Round3,p] - TotalCardsPlayed[Round3,p]  + CardsDealtPerRound[Round4]
 );
 
+% TODO: Move to simultanouse
+% The last player must have played atleast one card of the top artist
+constraint forall(r in Rounds) (
+  visible_count_per_round_per_artist_per_player[r,last_player[r],sorted_artists_per_round[r,1]] >=1
+);
+
 % TURN ORDER STUFF
 constraint forall(r in Rounds) (
   NominalTurnCount[r] = TotalCardsPlayed[r, last_player[r]]
@@ -69,8 +75,6 @@ var set of Players: Px1;
 var set of Players: Px2;
 var set of Players: Px3;
 var set of Players: Px4;
-
-set of int: emptySet = 1..0;
 
 constraint Pn1 = if (first_player[Round1] < last_player[Round1]) then
      first_player[Round1]..last_player[Round1]

@@ -19,16 +19,14 @@ array[Rounds] of var Players: last_player;
 % Total points that an artist has in a given round
 array[Rounds,Artists] of var int: total_score_per_round_per_artist;
 
-% Score a player gets in each given round
-array[Rounds,Players] of var int: RoundScore;
-
-% Final score of a player
-array[Players] of var int: Score;
-
 % Total number of a cards of an artist that were PLAYED this round
 array[Rounds, Artists] of var int: CardsForArtist;
 
 % Number of Turns played by the closing player this round
 array[Rounds] of var int: NominalTurnCount;
+
+% constraint award_bonus_per_round_per_artist[Round1,Krypto] = true;
+% constraint award_bonus_per_round_per_artist[Round1,Yoko] = true;
+% constraint award_bonus_per_round_per_artist[Round1,ChristinP] = true;
 
 solve maximize Score[Nemo];
