@@ -22,41 +22,54 @@ I'm using MiniZinc, which is a constraint programming language commonly used for
 
 ### Card Count Constraints
 
-1. Total number of cards of any artist are limited (17-21, depending on the artist)
-2. Total number of starting cards of any player are limited (13 for first round, and additions are limited on the number of players)
-3. Max number of "visible" cards in any round for any artist can be 6  (or 5 in case of 2 players)
-4. Total number of played cards for a round < Total number of playable cards for this round
+- [x] Total number of cards of any artist are limited (17-21, depending on the artist)
+- [x] Total number of starting cards of any player are limited (13 for first round, and additions are limited on the number of players)
+- [x] Max number of "visible" cards in any round for any artist can be 6  (or 5 in case of 2 players)
+- [x] Total number of played cards for a round < Total number of playable cards for this round
 
 ### Draw One Card
 
 Similar to the `double_card` boolean table, we maintain a `draw_one` boolean lookup table. This goes to 1 if a draw one card is played by any player for a given artist.
 
 `Starting Cards for a Round(r) = PlayableCards(r-1) - PlayedCards(r-1) + CardsDealt(r,PlayerCount)`
-: Starting cards are based on initial cards given to you, number of cards you played in previous rounds, and any additional cards you acquired via being dealt. CardsDealt is the lookup table I've given below. `PlayableCards(-1)`, and `PlayedCards(-1)` is set to 0.
+
+Starting cards are based on initial cards given to you, number of cards you played in previous rounds, and any additional cards you acquired via being dealt. CardsDealt is the lookup table I've given below. `PlayableCards(-1)`, and `PlayedCards(-1)` is set to 0.
 
 `Playable Cards for a Round = Starting Cards for that round + 𝚺(a in Artists) ( 1 ⇔ draw_one(a) ∧ CardsPlayed(a) >=1 )`
-: Playable cards for any given round are starting cards + 1 card for every draw one card you played. Note that cards you draw are playable in the round you drew them.
+
+Playable cards for any given round are starting cards + 1 card for every draw one card you played. Note that cards you draw are playable in the round you drew them.
 
 ### Gameplay Constraints
 
 These are the toughest ones. We define the following notation (for any given round)
 
-`P*`
-: First Player
-`P'`
-: Closing Player
-`A'`
-: Closing Artist (the one with 6|5 cards)
-`Pn`
-: Players that fall between `P*` and `P'`. These are players that have not been skipped over.
-`𝚻`
-: Number of "turns" that the closing player played.
-`Px`
-: All players not in `Pn`. Turns have been skipped for these.
+#### `P*`
 
-1. `Turns(Px) = 𝚻-1`, ie Px - get one fewer turn
-2. The number of cards you can play in a round = number of turns (ignoring symbols for now)
-3. `P'` (closing player) must have played atleast one card of `A'`. (Ignoring symbols again for now).
+First Player
+
+#### `P'`
+
+Closing Player
+
+#### `A'`
+
+Closing Artist (the one with 6|5 cards)
+
+#### `Pn`
+
+Players that fall between `P*` and `P'`. These are players that have not been skipped over.
+
+#### `𝚻`
+
+Number of "turns" that the closing player played.
+
+#### `Px`
+
+All players not in `Pn`. Turns have been skipped for these.
+
+- [x] `Turns(Px) = 𝚻-1`, ie Px - get one fewer turn
+- [x]  The number of cards you can play in a round = number of turns (ignoring symbols for now)
+- [x] `P'` (closing player) must have played atleast one card of `A'`. (Ignoring symbols again for now).
 
 ### Second Card Face Up
 
@@ -65,7 +78,8 @@ We keep a variable called `double_played` denoting whether a "double" card was p
 In order to accomodate this, we use the turn calculation from gameplay constraints. Constraints are:
 
 `Cards(Px) = 𝚻-1 + 𝚺(a in Artists) ( 1 ⇔ double_played(a) ∧ CardsPlayed(a) >=2 )`
-: Total number of cards playable is same as their number of turns, but we add a +1 for every artist that had a double card played this turn, but with the condition that the minimum number of cards of that artist were 2.
+
+Total number of cards playable is same as their number of turns, but we add a +1 for every artist that had a double card played this turn, but with the condition that the minimum number of cards of that artist were 2.
 
 ### Scoring Constraints
 
@@ -73,22 +87,32 @@ For scoring the awards, we keep a boolean array denoting which round any artist 
 
 We subdivide the score into the following sections:
 
-Ranking Score
-: Top 3 artists in each round get 1-3 points per card played)
+#### Ranking Score
 
-Awards Score
-: For any artist that got an award in Round(R), their cumulative score for this and all future rounds is increased by 2.
+- [x] Top 3 artists in each round get 1-3 points per card played)
+
+#### Awards Score
+
+- [x] For any artist that got an award in Round(R), their cumulative score for this and all future rounds is increased by 2.
 
 ### Missing Constraints
 
-1. Since the model misses out on the turn-dynamics, and treats symbols as global counters (instead of being attached to specific cards), there are some additional constraints that will be required. Without these, I'm expecting to see the same card being used for multiple symbols. Some sort of Symbol counter per round that keeps track of total number of cards you've claimed for symbols would be a better approach.
-2. Second card face down.
-3. Simultaneous play
-4. "Additional Card Play". Every round, all players can opt to play one extra card per artist they've already played. Note that this rule is very ambigously worded in the rules. I'm planning to implement the "blessed" variant. See https://boardgamegeek.com/thread/473713/playing-additional-cards-during-scoring for more details.
+- [ ] Since the model misses out on the turn-dynamics, and treats symbols as global counters (instead of being attached to specific cards), there are some additional constraints that will be required. Without these, I'm expecting to see the same card being used for multiple symbols. Some sort of Symbol counter per round that keeps track of total number of cards you've claimed for symbols would be a better approach.
+- [ ] Second card face down.
+- [ ] Simultaneous play
+- [ ] "Additional Card Play". Every round, all players can opt to play one extra card per artist they've already played. Note that this rule is very ambigously worded in the rules. I'm planning to implement the "blessed" variant. See https://boardgamegeek.com/thread/473713/playing-additional-cards-during-scoring for more details.
 
-## Cards Dealt
+## TODO
 
-Each player is dealt additional cards based on this table at the start of that round.
+Outside of constraints, I've to get to the following:
+
+- [ ] Improve output formatting
+- [ ] Get JSON output to render outside of the solver
+- [ ] Get Gecode and other solvers working
+
+## Cards Dealt Table
+
+Each player is dealt additional cards based on this table at the start of that round. This is implemented in `dealing.md`.
 
 | # Players | 2  | 3  | 4  | 5  |
 |-----------|----|----|----|----|
