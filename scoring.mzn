@@ -15,12 +15,18 @@ constraint forall(r in Rounds, a in Artists) (
       total_score_per_round_per_artist[enum_prev(Rounds, r),a] endif
 );
 
-% Calculate total score per player
+% This is same as total_score but force set to zero if the artist is not ranked
+% This is what each player gets for each card they play
+array[Rounds,Artists] of var int: ArtistScore;
+constraint forall(r in Rounds, a in Artists) (
+    ArtistScore[r,a] = if IsArtistRanked[r,a] then total_score_per_round_per_artist[r,a] else 0 endif
+);
 
+% Calculate total score per player
 % 1. Per Round
 constraint forall(r in Rounds, p in Players) (
   RoundScore[r,p] = sum(a in Artists) (
-    visible_count_per_round_per_artist_per_player[r,p,a] * ranking_score_per_artist_per_round[r,a]
+    visible_count_per_round_per_artist_per_player[r,p,a] * ArtistScore[r,a]
   )
 );
 

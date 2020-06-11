@@ -1,0 +1,35 @@
+{
+    "builtinSolverConfigs": [
+    ],
+    "openFiles": [
+        "artists.mzn",
+        "awards.mzn",
+        "dealing.mzn",
+        "double.mzn",
+        "functions.mzn",
+        "gameplay.mzn",
+        "modernart.mzn",
+        "ranking.mzn",
+        "ranking.mzn",
+        "sanity.mzn",
+        "scoring.mzn"
+    ],
+    "openTab": 10,
+    "projectFiles": [
+        "artists.mzn",
+        "awards.mzn",
+        "dealing.mzn",
+        "double.mzn",
+        "functions.mzn",
+        "gameplay.mzn",
+        "modernart.mzn",
+        "ranking.mzn",
+        "sanity.mzn",
+        "scoring.mzn"
+    ],
+    "projectSolverConfigs": [
+    ],
+    "selectedBuiltinConfigId": "org.gecode.gecode",
+    "selectedBuiltinConfigVersion": "6.1.1",
+    "version": 105
+}

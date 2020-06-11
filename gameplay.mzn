@@ -28,8 +28,8 @@ var 5..6: MaxVisibleCards;
 constraint MaxVisibleCards = if card(Players)>2 then 6 else 5 endif;
 
 % Maximum MaxVisibleCards of the artist with maximum cards
+% TODO: Replace with at_most, if this isn't cleaned up after simultaneous
 constraint forall(r in Rounds) (max(row(CardsForArtist,r)) = MaxVisibleCards);
-
 % second highest value should not be the max
 constraint forall(r in Rounds) (sort(row(CardsForArtist, r))[4] != MaxVisibleCards);
 
@@ -79,6 +79,11 @@ var set of Players: Px1;
 var set of Players: Px2;
 var set of Players: Px3;
 var set of Players: Px4;
+
+% First player in all future rounds is determined by the next player from the player who finished previous round
+constraint first_player[Round2] = if last_player[Round1] = card(Players) then 1 else enum_next(Players, last_player[Round1]) endif;
+constraint first_player[Round3] = if last_player[Round2] = card(Players) then 1 else enum_next(Players, last_player[Round2]) endif;
+constraint first_player[Round4] = if last_player[Round3] = card(Players) then 1 else enum_next(Players, last_player[Round3]) endif;
 
 constraint Pn1 = if (first_player[Round1] < last_player[Round1]) then
      first_player[Round1]..last_player[Round1]
