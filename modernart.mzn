@@ -3,7 +3,7 @@ enum Players;
 enum Artists;
 enum Rounds;
 
-Players = {Nemo,Jana, Adam};
+Players = {Nemo, Jana, Adam};
 Artists = {Krypto,KarlGitter,ChristinP,Yoko,LiteMetal};
 Rounds = {Round1, Round2, Round3, Round4};
 

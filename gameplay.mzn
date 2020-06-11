@@ -54,6 +54,10 @@ constraint forall(p in Players) (
   StartingCardsInHand[Round4,p] = StartingCardsInHand[Round3,p] - TotalCardsPlayed[Round3,p]  + CardsDealtPerRound[Round4]
 );
 
+constraint forall(r in Rounds, p in Players) (
+  StartingCardsInHand[r,p] >= TotalCardsPlayed[r,p]
+);
+
 % TODO: Move to simultanouse
 % The last player must have played atleast one card of the top artist
 constraint forall(r in Rounds) (
