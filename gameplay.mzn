@@ -8,9 +8,10 @@ include "artists.mzn";
 include "dealing.mzn";
 % Ignoring these for now
 % include "double.mzn";
-% include "drawone.mzn";
+include "drawone.mzn";
 % include "hidden.mzn";
 % include "simultaneous.mzn";
+include "symbols.mzn";
 
 /*
  This file includes the core gameplay rules
@@ -42,18 +43,26 @@ constraint forall(r in Rounds, p in Players) (
 
 % Calculate maximum cards any player can play in first round
 array[Rounds,Players] of var int: StartingCardsInHand;
-% Round 1 Starting Hand is 13 cards
-constraint forall(p in Players) (StartingCardsInHand[Round1,p] = CardsDealtPerRound[Round1]);
-constraint forall(p in Players) ( 
-  StartingCardsInHand[Round2,p] = StartingCardsInHand[Round1,p] - TotalCardsPlayed[Round1,p]  + CardsDealtPerRound[Round2]
-);
-constraint forall(p in Players) ( 
-  StartingCardsInHand[Round3,p] = StartingCardsInHand[Round2,p] - TotalCardsPlayed[Round2,p]  + CardsDealtPerRound[Round3]
-);
-constraint forall(p in Players) ( 
-  StartingCardsInHand[Round4,p] = StartingCardsInHand[Round3,p] - TotalCardsPlayed[Round3,p]  + CardsDealtPerRound[Round4]
+
+% Starting Cards for First Round = Cards Dealt
+constraint forall(p in Players) (
+  StartingCardsInHand[Round1,p] = CardsDealtPerRound[Round1]
 );
 
+% Playable Card Calculation in drawone.mzn
+
+% Starting cards for subsequent rounds  = Playable Cards from previous round - Cards Played + cards dealt
+constraint forall(p in Players) (
+  StartingCardsInHand[Round2,p] = PlayableCards[Round1,p] - TotalCardsPlayed[Round1,p]  + CardsDealtPerRound[Round2]
+);
+constraint forall(p in Players) (
+  StartingCardsInHand[Round3,p] = PlayableCards[Round2,p] - TotalCardsPlayed[Round2,p]  + CardsDealtPerRound[Round3]
+);
+constraint forall(p in Players) (
+  StartingCardsInHand[Round4,p] = PlayableCards[Round3,p] - TotalCardsPlayed[Round3,p]  + CardsDealtPerRound[Round4]
+);
+
+% For every round, you must start with more cards than you play
 constraint forall(r in Rounds, p in Players) (
   StartingCardsInHand[r,p] >= TotalCardsPlayed[r,p]
 );
@@ -82,28 +91,28 @@ constraint first_player[Round4] = if last_player[Round3] = card(Players) then 1 
 
 constraint Pn1 = if (first_player[Round1] < last_player[Round1]) then
      first_player[Round1]..last_player[Round1]
-   else    
+   else
      Players diff (first_player[Round1]..last_player[Round1])
    endif;
 
 
 constraint Pn2 = if (first_player[Round2] < last_player[Round2]) then
      first_player[Round2]..last_player[Round2]
-   else    
+   else
      Players diff first_player[Round2]..last_player[Round2]
    endif;
 
 
 constraint Pn3 = if (first_player[Round3] < last_player[Round3]) then
      first_player[Round3]..last_player[Round3]
-   else    
+   else
      Players diff first_player[Round3]..last_player[Round3]
    endif;
 
 
 constraint Pn4 = if (first_player[Round4] < last_player[Round4]) then
      first_player[Round4]..last_player[Round4]
-   else    
+   else
      Players diff first_player[Round4]..last_player[Round4]
    endif;
 
@@ -111,10 +120,3 @@ constraint forall(p in Players) (TotalCardsPlayed[Round1, p] = if p in Pn1 then 
 constraint forall(p in Players) (TotalCardsPlayed[Round2, p] = if p in Pn2 then NominalTurnCount[Round2] else NominalTurnCount[Round2] - 1 endif);
 constraint forall(p in Players) (TotalCardsPlayed[Round3, p] = if p in Pn3 then NominalTurnCount[Round3] else NominalTurnCount[Round3] - 1 endif);
 constraint forall(p in Players) (TotalCardsPlayed[Round4, p] = if p in Pn3 then NominalTurnCount[Round4] else NominalTurnCount[Round4] - 1 endif);
-
-% Total Playable Cards for any round are set equal to the Starting Hand
-% TODO: Move this to `drawone`
-array[Rounds,Players] of var int: PlayableCards;
-constraint forall(p in Players, r in Rounds) (
-  PlayableCards[r,p] = StartingCardsInHand[r,p]
-);
