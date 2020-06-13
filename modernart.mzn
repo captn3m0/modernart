@@ -4,9 +4,11 @@ enum Artists;
 enum Rounds;
 
 Players = {Nemo, Jana, Adam};
+
 % The order here is opposite of what you'd usually use while playing the game
 % because this results in LiteMetal getting a higher numeric value and that makes
 % sorting much easier
+
 Artists = {Krypto,KarlGitter,ChristinP,Yoko,LiteMetal};
 Rounds = {Round1, Round2, Round3, Round4};
 

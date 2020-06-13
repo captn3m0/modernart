@@ -2,6 +2,16 @@
 
 This is a [MiniZinc](https://www.minizinc.org/) based attempt to solve the [Modern Art: Masters Gallery](https://boardgamegeek.com/boardgame/40381/masters-gallery) game.
 
+The current partial implementation (see below for missing rules) results in a highest possible score of 242. (`*` = Award given to artist).
+
+|Player 1|Player 2|Player 3|A|B|C|D|E|
+|--------|--------|--------|-|-|-|-|-|
+|AA*     |AA      |AA      |5|0|0|1|2|
+|AAAEE*  |BBCC*E  |D*EEEE  |7|0|0|4|7|
+|AAAAAEEEE|ABBBDDDDE|BBCCCCCA|10|0|0|5|9|
+|AAAAAAEEE|BBBBCCCDD|B*CCDDDEE|13|0|0|6|11|
+|*242* = 10+35+86+111|*65* = 10+4+39+12|*87* = 10+32+5+40|
+
 ## Plan
 
 - Implement all of the game ruleset in MiniZinc.
@@ -97,10 +107,11 @@ We subdivide the score into the following sections:
 
 ### Missing Constraints
 
-- [ ] Since the model misses out on the turn-dynamics, and treats symbols as global counters (instead of being attached to specific cards), there are some additional constraints that will be required. Without these, I'm expecting to see the same card being used for multiple symbols. Some sort of Symbol counter per round that keeps track of total number of cards you've claimed for symbols would be a better approach.
-- [ ] Second card face down.
-- [ ] Simultaneous play
-- [ ] "Additional Card Play". Every round, all players can opt to play one extra card per artist they've already played. Note that this rule is very ambigously worded in the rules. I'm planning to implement the "blessed" variant. See https://boardgamegeek.com/thread/473713/playing-additional-cards-during-scoring for more details.
+- [ ] Symbol - Draw One Card
+- [ ] Symbol - Second card face down
+- [ ] Symbol - Simultaneous play
+- [ ] Since the model misses out on the turn-dynamics, and treats symbols as global counters (instead of being attached to specific cards), there are some additional constraints that will be required. Without these, I'm expecting to see the same card being used for multiple symbols. Some sort of **Symbol counter** per round that keeps track of total number of cards you've claimed for symbols would be a better approach.
+- [ ] **Additional Card Play**. Every round, all players can opt to play one extra card per artist they've already played. Note that this rule is very ambigously worded in the rules. I'm planning to implement the "blessed" variant. See https://boardgamegeek.com/thread/473713/playing-additional-cards-during-scoring for more details.
 
 ## TODO
 
