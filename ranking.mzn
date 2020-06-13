@@ -1,5 +1,5 @@
 % How much score was made by each artist in each round by just RANKING
-array[Rounds,Artists] of var int: ranking_score_per_artist_per_round;
+array[Rounds,Artists] of var 0..3: ranking_score_per_artist_per_round;
 
 % Winning artists for each round (just-by-ranking)
 array[Rounds,1..card(Artists)] of var Artists: sorted_artists_per_round;
