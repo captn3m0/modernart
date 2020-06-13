@@ -30,10 +30,6 @@ array[Rounds, Artists] of var 0..10: CardsForArtist;
 % Number of Turns played by the closing player this round
 array[Rounds] of var 0..10: NominalTurnCount;
 
-% constraint award_bonus_per_round_per_artist[Round1,Krypto] = true;
-% constraint award_bonus_per_round_per_artist[Round1,Yoko] = true;
-% constraint award_bonus_per_round_per_artist[Round1,ChristinP] = true;
-
 % Symmetry Breaking
 constraint Score[Nemo] > Score[Jana];
 

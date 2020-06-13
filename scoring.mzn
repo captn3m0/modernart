@@ -2,7 +2,7 @@
 array[Rounds,Players] of var int: RoundScore;
 
 % Final score of a player
-array[Players] of var int: Score;
+array[Players] of var 0..500: Score;
 
 % For Cumulative Scoring
 % Score = ranking_score + award_score if an award was given this round
@@ -12,12 +12,13 @@ constraint forall(r in Rounds, a in Artists) (
     if r=Round1 then 
       0 
     else 
-      total_score_per_round_per_artist[enum_prev(Rounds, r),a] endif
+      total_score_per_round_per_artist[enum_prev(Rounds, r),a] 
+    endif
 );
 
 % This is same as total_score but force set to zero if the artist is not ranked
 % This is what each player gets for each card they play
-array[Rounds,Artists] of var int: ArtistScore;
+array[Rounds,Artists] of var 0..15: ArtistScore;
 constraint forall(r in Rounds, a in Artists) (
     ArtistScore[r,a] = if IsArtistRanked[r,a] then total_score_per_round_per_artist[r,a] else 0 endif
 );

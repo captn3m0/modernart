@@ -10,7 +10,7 @@
 % Whether an artist won an award in a given round
 array[Rounds,Artists] of var bool: awards_per_round_per_artist;
 
-array[Rounds,Artists] of var int: award_bonus_per_round_per_artist;
+array[Rounds,Artists] of var {0,2}: award_bonus_per_round_per_artist;
 
 % Total number of awards for each artist = 1
 constraint forall(a in Artists) ( sum(col(awards_per_round_per_artist,a)) = 1 );

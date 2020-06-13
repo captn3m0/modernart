@@ -34,7 +34,7 @@ constraint forall(r in Rounds) (max(row(CardsForArtist,r)) = MaxVisibleCards);
 constraint forall(r in Rounds) (sort(row(CardsForArtist, r))[4] != MaxVisibleCards);
 
 % Temporary variable to see how many cards you've played TOTAL per round
-array[Rounds,Players] of var int: TotalCardsPlayed;
+array[Rounds,Players] of var 1..20: TotalCardsPlayed;
 constraint forall(r in Rounds, p in Players) (
 % TODO: Change this to played cards from VISIBLE (hidden)
   TotalCardsPlayed[r,p] = sum(a in Artists) (visible_count_per_round_per_artist_per_player[r,p,a])

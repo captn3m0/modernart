@@ -1,7 +1,7 @@
 % This file deals with dealing of new cards every Round
 
 % Usable variable from here is CardsDealtPerRound[Rounds]
-array[Rounds] of var int: CardsDealtPerRound;
+array[Rounds] of var 0..13: CardsDealtPerRound;
 
 constraint CardsDealtPerRound[Round1] = 13;
 constraint CardsDealtPerRound[Round2] = 
