@@ -119,7 +119,7 @@ Outside of constraints, I've to get to the following:
 
 - [ ] Improve output formatting
 - [ ] Get JSON output to render outside of the solver
-- [ ] Get Gecode and other solvers working
+- [x] Get Gecode and other solvers working
 
 ## Cards Dealt Table
 

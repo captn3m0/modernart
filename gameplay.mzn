@@ -88,34 +88,34 @@ constraint first_player[Round4] = if last_player[Round3] = card(Players) then 1 
 constraint Pn1 = if (first_player[Round1] < last_player[Round1]) then
      first_player[Round1]..last_player[Round1]
    else    
-     set_diff(Players,first_player[Round1]..last_player[Round1])
+     Players diff (first_player[Round1]..last_player[Round1])
    endif;
 
 
 constraint Pn2 = if (first_player[Round2] < last_player[Round2]) then
      first_player[Round2]..last_player[Round2]
    else    
-     set_diff(Players,first_player[Round2]..last_player[Round2])
+     Players diff first_player[Round2]..last_player[Round2]
    endif;
 
 
 constraint Pn3 = if (first_player[Round3] < last_player[Round3]) then
      first_player[Round3]..last_player[Round3]
    else    
-     set_diff(Players,first_player[Round3]..last_player[Round3])
+     Players diff first_player[Round3]..last_player[Round3]
    endif;
 
 
 constraint Pn4 = if (first_player[Round4] < last_player[Round4]) then
      first_player[Round4]..last_player[Round4]
    else    
-     set_diff(Players,first_player[Round4]..last_player[Round4])
+     Players diff first_player[Round4]..last_player[Round4]
    endif;
    
-constraint Px1 = set_diff(Players,Pn1);
-constraint Px2 = set_diff(Players,Pn2);
-constraint Px3 = set_diff(Players,Pn3);
-constraint Px4 = set_diff(Players,Pn4);
+constraint Px1 = Players diff Pn1;
+constraint Px2 = Players diff Pn2;
+constraint Px3 = Players diff Pn3;
+constraint Px4 = Players diff Pn4;
 
 constraint forall(p in Players) (p in Pn1 -> TotalCardsPlayed[Round1, p] = NominalTurnCount[Round1]);
 constraint forall(p in Players) (p in Pn2 -> TotalCardsPlayed[Round2, p] = NominalTurnCount[Round2]);
