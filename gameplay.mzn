@@ -58,7 +58,7 @@ constraint forall(r in Rounds, p in Players) (
   StartingCardsInHand[r,p] >= TotalCardsPlayed[r,p]
 );
 
-% TODO: Move to simultanouse
+% TODO: Move to simultaneous
 % The last player must have played atleast one card of the top artist
 constraint forall(r in Rounds) (
   visible_count_per_round_per_artist_per_player[r,last_player[r],sorted_artists_per_round[r,1]] >=1
@@ -74,11 +74,6 @@ var set of Players: Pn1;
 var set of Players: Pn2;
 var set of Players: Pn3;
 var set of Players: Pn4;
-%All players who played sub-nominal turns
-var set of Players: Px1;
-var set of Players: Px2;
-var set of Players: Px3;
-var set of Players: Px4;
 
 % First player in all future rounds is determined by the next player from the player who finished previous round
 constraint first_player[Round2] = if last_player[Round1] = card(Players) then 1 else enum_next(Players, last_player[Round1]) endif;
@@ -111,21 +106,11 @@ constraint Pn4 = if (first_player[Round4] < last_player[Round4]) then
    else    
      Players diff first_player[Round4]..last_player[Round4]
    endif;
-   
-constraint Px1 = Players diff Pn1;
-constraint Px2 = Players diff Pn2;
-constraint Px3 = Players diff Pn3;
-constraint Px4 = Players diff Pn4;
 
-constraint forall(p in Players) (p in Pn1 -> TotalCardsPlayed[Round1, p] = NominalTurnCount[Round1]);
-constraint forall(p in Players) (p in Pn2 -> TotalCardsPlayed[Round2, p] = NominalTurnCount[Round2]);
-constraint forall(p in Players) (p in Pn3 -> TotalCardsPlayed[Round3, p] = NominalTurnCount[Round3]);
-constraint forall(p in Players) (p in Pn3 -> TotalCardsPlayed[Round4, p] = NominalTurnCount[Round4]);
-
-constraint forall(p in Players) (p in Px1 -> TotalCardsPlayed[Round1, p] = NominalTurnCount[Round1] - 1);
-constraint forall(p in Players) (p in Px2 -> TotalCardsPlayed[Round2, p] = NominalTurnCount[Round2] - 1);
-constraint forall(p in Players) (p in Px3 -> TotalCardsPlayed[Round3, p] = NominalTurnCount[Round3] - 1);
-constraint forall(p in Players) (p in Px3 -> TotalCardsPlayed[Round4, p] = NominalTurnCount[Round4] - 1);
+constraint forall(p in Players) (TotalCardsPlayed[Round1, p] = if p in Pn1 then NominalTurnCount[Round1] else NominalTurnCount[Round1] - 1 endif);
+constraint forall(p in Players) (TotalCardsPlayed[Round2, p] = if p in Pn2 then NominalTurnCount[Round2] else NominalTurnCount[Round2] - 1 endif);
+constraint forall(p in Players) (TotalCardsPlayed[Round3, p] = if p in Pn3 then NominalTurnCount[Round3] else NominalTurnCount[Round3] - 1 endif);
+constraint forall(p in Players) (TotalCardsPlayed[Round4, p] = if p in Pn3 then NominalTurnCount[Round4] else NominalTurnCount[Round4] - 1 endif);
 
 % Total Playable Cards for any round are set equal to the Starting Hand
 % TODO: Move this to `drawone`
