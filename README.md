@@ -107,9 +107,10 @@ We subdivide the score into the following sections:
 
 ### Missing Constraints
 
-- [ ] Symbol - Draw One Card
+- [ ] Symbol(■) - Draw One Card
+- [ ] Symbol - Second card face up
 - [ ] Symbol - Second card face down
-- [ ] Symbol - Simultaneous play
+- [ ] Symbol (✠) - Simultaneous play
 - [ ] Since the model misses out on the turn-dynamics, and treats symbols as global counters (instead of being attached to specific cards), there are some additional constraints that will be required. Without these, I'm expecting to see the same card being used for multiple symbols. Some sort of **Symbol counter** per round that keeps track of total number of cards you've claimed for symbols would be a better approach.
 - [ ] **Additional Card Play**. Every round, all players can opt to play one extra card per artist they've already played. Note that this rule is very ambigously worded in the rules. I'm planning to implement the "blessed" variant. See https://boardgamegeek.com/thread/473713/playing-additional-cards-during-scoring for more details.
 
