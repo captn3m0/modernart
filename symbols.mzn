@@ -9,7 +9,14 @@
 % and may ultimately end up replacing separate symbol counters
 
 constraint forall(r in Rounds, a in Artists) (
+  % Total number of cards played by all players
+  % MINUS total number of Draw One Cards played by all players
   sum (p in Players) (
     visible_count_per_round_per_artist_per_player[r,p,a] - DrawOneCard[r,p,a]
-  ) >= awards_per_round_per_artist[r,a]
+  )
+  % MINUS total number of awards given this round
+   - (if AwardPlayedInRound[a] = r /\ AwardGiven[a] then 1 else 0 endif)
+  % Is the number of Symbol Cards played this turn
+  % and it can't be negative
+  >= 0
 );
