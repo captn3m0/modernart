@@ -2,15 +2,7 @@
 
 This is a [MiniZinc](https://www.minizinc.org/) based attempt to solve the [Modern Art: Masters Gallery](https://boardgamegeek.com/boardgame/40381/masters-gallery) game.
 
-The current partial implementation (see below for missing rules) results in a highest possible score of 242. (`*` = Award given to artist).
-
-|Player 1|Player 2|Player 3|A|B|C|D|E|
-|--------|--------|--------|-|-|-|-|-|
-|AA*     |AA      |AA      |5|0|0|1|2|
-|AAAEE*  |BBCC*E  |D*EEEE  |7|0|0|4|7|
-|AAAAAEEEE|ABBBDDDDE|BBCCCCCA|10|0|0|5|9|
-|AAAAAAEEE|BBBBCCCDD|B*CCDDDEE|13|0|0|6|11|
-|*242* = 10+35+86+111|*65* = 10+4+39+12|*87* = 10+32+5+40|
+The current partial implementation (see below for missing rules) results in a highest possible score of 298 for a 2 player game. See [games/03.md](games/03.md) for the complete episode. There are a few more games available in [the games directory](games/)
 
 ## Plan
 
@@ -119,8 +111,8 @@ We subdivide the score into the following sections:
 
 Outside of constraints, I've to get to the following:
 
-- [ ] Improve output formatting
-- [ ] Get JSON output to render outside of the solver
+- [x] Improve output formatting
+- [x] Get JSON output to render outside of the solver
 - [x] Get Gecode and other solvers working
 
 ## Cards Dealt Table
