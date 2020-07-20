@@ -20,7 +20,7 @@ constraint forall(r in Rounds, p in Players) (
 );
 
 % Round 1 Player 1
-constraint first_player[Round1] = Nemo;
+constraint first_player[Round1] = Player1;
 
 % Visible Cards per round per player for every artist > 0
 constraint forall(a in Artists) (

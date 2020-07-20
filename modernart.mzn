@@ -3,7 +3,7 @@ enum Players;
 enum Artists;
 enum Rounds;
 
-Players = {Nemo, Jana};
+Players = {Player1, Player2, Player3,Player4};
 
 % The order here is opposite of what you'd usually use while playing the game
 % because this results in LiteMetal getting a higher numeric value and that makes
@@ -31,8 +31,7 @@ array[Rounds, Artists] of var 0..10: CardsForArtist;
 array[Rounds] of var 0..10: NominalTurnCount;
 
 % Symmetry Breaking
-constraint Score[Nemo] > Score[Jana];
 
-solve maximize Score[Nemo];
+solve maximize Score[Player2];
 
 output  outputJSON();
