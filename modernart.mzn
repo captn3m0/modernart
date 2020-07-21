@@ -34,4 +34,4 @@ array[Rounds] of var 0..10: NominalTurnCount;
 
 solve maximize Score[Player2];
 
-output  outputJSON();
+output outputJSON();
