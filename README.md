@@ -2,7 +2,7 @@
 
 This is a [MiniZinc](https://www.minizinc.org/) based attempt to solve the [Modern Art: Masters Gallery](https://boardgamegeek.com/boardgame/40381/masters-gallery) game.
 
-The current partial implementation (see below for missing rules) results in a highest possible score of 301 for a 2 player game (238 for 4 players). See [games/04.md](games/04.md) for the complete episode. There are a few more games available in [the games directory](games/).
+The current partial implementation (see below for missing rules) results in a highest possible score of 301 for a 2 player game (258 for 4 players). See [games/04.md](games/04.md) for the complete episode. There are a few more games available in [the games directory](games/).
 
 ## Plan
 
